@@ -64,6 +64,20 @@ main{padding-top:var(--header-h)} .stack{padding:18px 0 120px} .category{padding
 const modal=document.getElementById('modal'),modalName=document.getElementById('modalName'),modalPrice=document.getElementById('modalPrice'),modalSizes=document.getElementById('modalSizes'),modalColors=document.getElementById('modalColors'),modalMaterial=document.getElementById('modalMaterial'),waLink=document.getElementById('waLink'),closeModal=document.getElementById('closeModal');
 document.querySelectorAll('.card').forEach(card=>{const imgs=card.dataset.images.split('|');const imgEl=card.querySelector('.poster');const dots=[...card.querySelectorAll('.dot')];let idx=0;const setImg=i=>{idx=(i+imgs.length)%imgs.length;imgEl.src=imgs[idx];dots.forEach((d,j)=>d.classList.toggle('active',j===idx));};card.querySelector('.prev').addEventListener('click',e=>{e.stopPropagation();setImg(idx-1);});card.querySelector('.next').addEventListener('click',e=>{e.stopPropagation();setImg(idx+1);});card.addEventListener('click',()=>{modalName.textContent=card.dataset.name;modalPrice.textContent='Preço: '+card.dataset.price;modalSizes.textContent=card.dataset.sizes?'Tamanhos: '+card.dataset.sizes:'';modalColors.textContent=card.dataset.colors?'Cores: '+card.dataset.colors:'';modalMaterial.textContent=card.dataset.material?'Material: '+card.dataset.material:'';const mainImg=document.getElementById('modalMainImg');mainImg.src=card.dataset.images.split('|')[0];mainImg.onclick=()=>{mainImg.classList.toggle('zoomed');};waLink.href='https://wa.me/5522996200291?text='+encodeURIComponent('Olá! Tenho interesse em '+card.dataset.name+' ('+card.dataset.price+').');modal.classList.add('active');});});
 closeModal.addEventListener('click',()=>modal.classList.remove('active'));modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('active');});document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.classList.remove('active');});
+
+// Meta Pixel — Lead ao clicar em qualquer botão WhatsApp
+document.querySelectorAll('a[href*="wa.me"]').forEach(function(el){
+  el.addEventListener('click', function(){
+    if(typeof fbq !== 'undefined'){
+      fbq('track', 'Lead', {
+        content_name: el.dataset.productName || '',
+        content_category: 'whatsapp',
+        currency: 'BRL',
+        value: 0
+      });
+    }
+  });
+});
 </script>
 </body>
 </html>
